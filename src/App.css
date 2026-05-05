@@ -160,6 +160,12 @@ body {
   margin-bottom: 20px;
   overflow: hidden;
 }
+.how-to-bottom {
+  margin-top: 24px;
+  opacity: 0.85;
+}
+.how-to-bottom:hover { opacity: 1; }
+.how-to-bottom .how-to-card { margin-bottom: 0; }
 .how-to-header {
   padding: 12px 16px;
   border-bottom: 1px solid var(--fiori-border);
