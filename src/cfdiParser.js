@@ -19,25 +19,27 @@ export function parseCFDI(xmlText) {
   const emisorEl   = comprobante.getElementsByTagNameNS(NS_CFDI, 'Emisor')[0]
   const receptorEl = comprobante.getElementsByTagNameNS(NS_CFDI, 'Receptor')[0]
 
-  const distribuidor = emisorEl   ? emisorEl.getAttribute('Nombre')  : ''
-  const rfc          = receptorEl ? receptorEl.getAttribute('Rfc')    : ''
+  const emisor       = emisorEl   ? emisorEl.getAttribute('Nombre')   : ''
+  const rfcEmisor    = emisorEl   ? emisorEl.getAttribute('Rfc')      : ''
+  const receptor     = receptorEl ? receptorEl.getAttribute('Nombre') : ''
+  const rfcReceptor  = receptorEl ? receptorEl.getAttribute('Rfc')    : ''
 
   const conceptos = comprobante.getElementsByTagNameNS(NS_CFDI, 'Concepto')
   const rows = []
 
   for (const c of conceptos) {
     rows.push({
-      DISTRIBUIDOR: distribuidor,
-      FECHA:        fecha,
-      FACTURA:      folio,
-      SUCURSAL:     null,
-      RFC:          rfc,
-      CDC:          null,
-      CODSAP:       c.getAttribute('NoIdentificacion') || '',
-      PRODUCTO:     (c.getAttribute('Descripcion') || '').trim(),
-      BOTELLAS:     parseFloat(c.getAttribute('Cantidad') || 0),
-      TOTAL:        parseFloat(c.getAttribute('Importe')  || 0),
-      DOCUMENTO:    uuid,
+      EMISOR:        emisor,
+      RFC_EMISOR:    rfcEmisor,
+      FECHA:         fecha,
+      FACTURA:       folio,
+      RECEPTOR:      receptor,
+      RFC_RECEPTOR:  rfcReceptor,
+      CODIGO_PRODUCTO: c.getAttribute('NoIdentificacion') || '',
+      PRODUCTO:      (c.getAttribute('Descripcion') || '').trim(),
+      BOTELLAS:      parseFloat(c.getAttribute('Cantidad') || 0),
+      TOTAL:         parseFloat(c.getAttribute('Importe')  || 0),
+      DOCUMENTO:     uuid,
     })
   }
 
