@@ -4,10 +4,9 @@ import { UniverSheetsCorePreset } from '@univerjs/preset-sheets-core'
 import UniverPresetSheetsCoreEsES from '@univerjs/preset-sheets-core/locales/es-ES'
 import '@univerjs/preset-sheets-core/lib/index.css'
 
-import { UniverSheetsFilterPlugin } from '@univerjs/sheets-filter'
-import { UniverSheetsFilterUIPlugin } from '@univerjs/sheets-filter-ui'
-import SheetsFilterUIEsES from '@univerjs/sheets-filter-ui/locale/es-ES'
-import '@univerjs/sheets-filter-ui/lib/index.css'
+import { UniverSheetsFilterPreset } from '@univerjs/preset-sheets-filter'
+import UniverPresetSheetsFilterEsES from '@univerjs/preset-sheets-filter/locales/es-ES'
+import '@univerjs/preset-sheets-filter/lib/index.css'
 
 const COLUMNS = ['EMISOR','RFC_EMISOR','FECHA','FACTURA','RECEPTOR','RFC_RECEPTOR','CODIGO_PRODUCTO','PRODUCTO','BOTELLAS','TOTAL','DOCUMENTO']
 
@@ -77,18 +76,13 @@ export default function UniverSheet({ rows }) {
     const { univer, univerAPI } = createUniver({
       locale: LocaleType.ES_ES,
       locales: {
-        [LocaleType.ES_ES]: mergeLocales(UniverPresetSheetsCoreEsES, SheetsFilterUIEsES),
+        [LocaleType.ES_ES]: mergeLocales(UniverPresetSheetsCoreEsES, UniverPresetSheetsFilterEsES),
       },
       presets: [
-        UniverSheetsCorePreset({
-          container: containerRef.current,
-        }),
+        UniverSheetsCorePreset({ container: containerRef.current }),
+        UniverSheetsFilterPreset(),
       ],
     })
-
-    // Plugins adicionales para AutoFilter estilo Excel (dropdowns en encabezados)
-    univer.registerPlugin(UniverSheetsFilterPlugin)
-    univer.registerPlugin(UniverSheetsFilterUIPlugin)
 
     univerRef.current = univer
     apiRef.current    = univerAPI
