@@ -38,11 +38,14 @@ export default function Privacy({ onBack }) {
           <ul>
             <li>No se almacenan los archivos XML cargados</li>
             <li>No se guardan los Excel descargados</li>
-            <li>No se registran direcciones IP, identificadores de dispositivo o sesión</li>
-            <li>No se utilizan cookies de seguimiento ni publicitarias</li>
+            <li>No se registran identificadores de dispositivo o sesión</li>
+            <li>No se utilizan cookies (ni de tracking ni de publicidad)</li>
             <li>No hay registro de cuentas, login ni perfiles de usuario</li>
-            <li>No se comparte información con terceros</li>
+            <li>No se comparte información personal con terceros</li>
           </ul>
+          <p>
+            <em>Para métricas agregadas de uso del sitio, consulta la sección "Analítica".</em>
+          </p>
         </section>
 
         <section>
@@ -57,10 +60,28 @@ export default function Privacy({ onBack }) {
         <section>
           <h2>5. Analítica</h2>
           <p>
-            En caso de habilitarse analítica de uso (visitas, navegadores), se utilizará
-            únicamente un servicio sin cookies y sin recolección de datos personales (por
-            ejemplo, Plausible o Umami). Estos servicios no rastrean usuarios individuales
-            ni almacenan información identificable.
+            Esta aplicación utiliza <strong>Umami</strong>, un servicio de analítica web
+            que respeta la privacidad. Umami:
+          </p>
+          <ul>
+            <li>No utiliza cookies</li>
+            <li>No rastrea usuarios individuales</li>
+            <li>No recolecta direcciones IP completas (las hashea)</li>
+            <li>No comparte datos con terceros</li>
+            <li>Cumple con GDPR, CCPA y PECR sin necesidad de banner de consentimiento</li>
+          </ul>
+          <p>
+            Lo único que se mide son métricas agregadas: número de visitas, país aproximado,
+            tipo de navegador y páginas vistas. Esto nos ayuda a saber si la herramienta es
+            útil. Puedes consultar la política de privacidad de Umami en{' '}
+            <a href="https://umami.is/privacy" target="_blank" rel="noopener noreferrer">
+              umami.is/privacy
+            </a>.
+          </p>
+          <p>
+            <strong>Importante:</strong> el contenido de tus archivos XML (RFCs, montos,
+            productos, etc.) <strong>NO</strong> se envía a Umami ni a ningún otro servicio.
+            La analítica solo registra que visitaste el sitio, no qué hiciste con tus archivos.
           </p>
         </section>
 

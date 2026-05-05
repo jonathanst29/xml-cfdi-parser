@@ -31,7 +31,7 @@ export default function WelcomeDialog({ onClose, onShowFull }) {
               <strong>Sin servidor</strong> — no hay backend que reciba tus archivos
             </li>
             <li>
-              <strong>Sin cookies, sin tracking</strong> — no se identifican usuarios
+              <strong>Sin cookies</strong> — solo analítica anónima de visitas (sin IDs ni IPs)
             </li>
             <li>
               <strong>Tus XMLs nunca se transmiten</strong> — ni se almacenan en ningún lado

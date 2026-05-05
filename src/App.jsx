@@ -149,7 +149,7 @@ export default function App() {
         <div className="footer-inner">
           <span className="footer-brand">XML · CFDI Parser</span>
           <span className="footer-sep">·</span>
-          <span className="footer-tag">Sin servidor · Sin cookies · Sin tracking</span>
+          <span className="footer-tag">Sin servidor · Sin cookies · Analítica anónima</span>
           <span className="footer-sep">·</span>
           <button className="footer-link" onClick={() => setView('privacy')}>
             Aviso de Privacidad
