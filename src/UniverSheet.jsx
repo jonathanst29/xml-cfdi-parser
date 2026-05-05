@@ -107,19 +107,35 @@ export default function UniverSheet({ rows }) {
 
     api.createWorkbook(rowsToSheetData(rows))
 
-    // Activar AutoFilter sobre encabezados + datos
-    try {
-      const wb    = api.getActiveWorkbook()
-      const sheet = wb.getActiveSheet()
-      const lastCol = String.fromCharCode(64 + COLUMNS.length) // A=65 → K para 11 cols
-      const lastRow = rows.length + 1
-      const range   = sheet.getRange(`A1:${lastCol}${lastRow}`)
-      const existingFilter = sheet.getFilter?.()
-      if (existingFilter) existingFilter.remove()
-      range.createFilter()
-    } catch (e) {
-      console.warn('No se pudo activar AutoFilter:', e)
+    // Activar AutoFilter sobre encabezados + datos.
+    // Lo metemos en un timeout para asegurar que el plugin de filtro
+    // ya esté completamente inicializado cuando creamos el filtro.
+    const tryCreateFilter = (attempt = 0) => {
+      try {
+        const wb    = api.getActiveWorkbook()
+        const sheet = wb?.getActiveSheet?.()
+        if (!sheet) {
+          if (attempt < 10) setTimeout(() => tryCreateFilter(attempt + 1), 100)
+          return
+        }
+        const lastCol = String.fromCharCode(64 + COLUMNS.length)
+        const lastRow = rows.length + 1
+        const range   = sheet.getRange(`A1:${lastCol}${lastRow}`)
+        const existingFilter = sheet.getFilter?.()
+        if (existingFilter) existingFilter.remove()
+        const result = range.createFilter()
+        if (!result && attempt < 10) {
+          setTimeout(() => tryCreateFilter(attempt + 1), 100)
+        }
+      } catch (e) {
+        if (attempt < 10) {
+          setTimeout(() => tryCreateFilter(attempt + 1), 100)
+        } else {
+          console.warn('No se pudo activar AutoFilter:', e)
+        }
+      }
     }
+    tryCreateFilter()
   }, [rows])
 
   return <div ref={containerRef} className="univer-container" />
