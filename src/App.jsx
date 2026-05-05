@@ -1,10 +1,11 @@
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback, useEffect, useMemo } from 'react'
 import { parseFiles } from './cfdiParser'
 import { exportToExcel } from './exporter'
 import UniverSheet from './UniverSheet'
 import Privacy from './Privacy'
 import WelcomeDialog from './WelcomeDialog'
 import HowToCard from './HowToCard'
+import FilterBar, { applyFilters } from './FilterBar'
 import './App.css'
 
 const WELCOME_KEY = 'cfdi-parser:welcome-seen'
@@ -16,6 +17,9 @@ export default function App() {
   const [filename, setFilename] = useState('COMPRAS_CFDI.xlsx')
   const [view, setView]         = useState('home')
   const [showWelcome, setShowWelcome] = useState(false)
+  const [filters, setFilters]   = useState({})
+
+  const filteredRows = useMemo(() => applyFilters(rows, filters), [rows, filters])
 
   useEffect(() => {
     if (!localStorage.getItem(WELCOME_KEY)) setShowWelcome(true)
@@ -44,9 +48,9 @@ export default function App() {
     processFiles(e.dataTransfer.files)
   }, [processFiles])
 
-  const totalBotellas = rows.reduce((s, r) => s + (r.BOTELLAS || 0), 0)
-  const totalImporte  = rows.reduce((s, r) => s + (r.TOTAL    || 0), 0)
-  const proveedores   = new Set(rows.map(r => r.EMISOR)).size
+  const totalBotellas = filteredRows.reduce((s, r) => s + (r.BOTELLAS || 0), 0)
+  const totalImporte  = filteredRows.reduce((s, r) => s + (r.TOTAL    || 0), 0)
+  const proveedores   = new Set(filteredRows.map(r => r.EMISOR)).size
 
   return (
     <>
@@ -111,7 +115,7 @@ export default function App() {
         <>
           <div className="stats">
             {[
-              { value: rows.length.toLocaleString('es-MX'), label: 'Conceptos' },
+              { value: filteredRows.length.toLocaleString('es-MX'), label: 'Conceptos' },
               { value: proveedores, label: 'Proveedores' },
               { value: totalBotellas.toLocaleString('es-MX'), label: 'Botellas' },
               { value: `$${totalImporte.toLocaleString('es-MX', { minimumFractionDigits: 2 })}`, label: 'Total MXN' },
@@ -130,18 +134,25 @@ export default function App() {
               onChange={e => setFilename(e.target.value)}
               placeholder="nombre-archivo.xlsx"
             />
-            <button className="btn-export" onClick={() => exportToExcel(rows, filename)}>
+            <button className="btn-export" onClick={() => exportToExcel(filteredRows, filename)}>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path strokeLinecap="round" strokeLinejoin="round"
                   d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
               </svg>
               Descargar Excel
             </button>
-            <button className="btn-clear" onClick={() => setRows([])}>Limpiar</button>
+            <button className="btn-clear" onClick={() => { setRows([]); setFilters({}) }}>Limpiar</button>
           </div>
 
+          <FilterBar
+            filters={filters}
+            setFilters={setFilters}
+            total={rows.length}
+            filteredCount={filteredRows.length}
+          />
+
           <div className="sheet-wrap">
-            <UniverSheet rows={rows} />
+            <UniverSheet rows={filteredRows} />
           </div>
 
           <div className="how-to-bottom">
