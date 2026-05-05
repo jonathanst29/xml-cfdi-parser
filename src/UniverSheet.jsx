@@ -103,6 +103,20 @@ export default function UniverSheet({ rows }) {
     } catch (e) { /* ignore */ }
 
     api.createWorkbook(rowsToSheetData(rows))
+
+    // Activar AutoFilter sobre encabezados + datos
+    try {
+      const wb    = api.getActiveWorkbook()
+      const sheet = wb.getActiveSheet()
+      const lastCol = String.fromCharCode(64 + COLUMNS.length) // A=65 → K para 11 cols
+      const lastRow = rows.length + 1
+      const range   = sheet.getRange(`A1:${lastCol}${lastRow}`)
+      const existingFilter = sheet.getFilter?.()
+      if (existingFilter) existingFilter.remove()
+      range.createFilter()
+    } catch (e) {
+      console.warn('No se pudo activar AutoFilter:', e)
+    }
   }, [rows])
 
   return <div ref={containerRef} className="univer-container" />
