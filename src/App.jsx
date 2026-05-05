@@ -1,15 +1,29 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { parseFiles } from './cfdiParser'
 import { exportToExcel } from './exporter'
+import UniverSheet from './UniverSheet'
+import Privacy from './Privacy'
+import WelcomeDialog from './WelcomeDialog'
 import './App.css'
 
-const PREVIEW_COLS = ['DISTRIBUIDOR','FECHA','FACTURA','RFC','CODSAP','PRODUCTO','BOTELLAS','TOTAL']
+const WELCOME_KEY = 'cfdi-parser:welcome-seen'
 
 export default function App() {
   const [rows, setRows]         = useState([])
   const [dragging, setDragging] = useState(false)
   const [loading, setLoading]   = useState(false)
   const [filename, setFilename] = useState('COMPRAS_CFDI.xlsx')
+  const [view, setView]         = useState('home')
+  const [showWelcome, setShowWelcome] = useState(false)
+
+  useEffect(() => {
+    if (!localStorage.getItem(WELCOME_KEY)) setShowWelcome(true)
+  }, [])
+
+  const dismissWelcome = () => {
+    localStorage.setItem(WELCOME_KEY, '1')
+    setShowWelcome(false)
+  }
 
   const processFiles = useCallback(async (files) => {
     const xmlFiles = [...files].filter(f => f.name.toLowerCase().endsWith('.xml'))
@@ -29,25 +43,40 @@ export default function App() {
     processFiles(e.dataTransfer.files)
   }, [processFiles])
 
-  const fmt = (d) => {
-    if (!d) return ''
-    if (d instanceof Date) return d.toISOString().slice(0, 10)
-    return String(d)
-  }
-
   const totalBotellas = rows.reduce((s, r) => s + (r.BOTELLAS || 0), 0)
   const totalImporte  = rows.reduce((s, r) => s + (r.TOTAL    || 0), 0)
-  const proveedores   = new Set(rows.map(r => r.DISTRIBUIDOR)).size
+  const proveedores   = new Set(rows.map(r => r.EMISOR)).size
 
   return (
     <>
+      {showWelcome && (
+        <WelcomeDialog
+          onClose={dismissWelcome}
+          onShowFull={() => { dismissWelcome(); setView('privacy') }}
+        />
+      )}
+
       <div className="shell-header">
-        <span className="shell-logo">SAP<span>•</span></span>
-        <span className="shell-sep">|</span>
-        <span className="shell-title">CFDI Parser</span>
+        <span className="shell-logo" onClick={() => setView('home')} style={{ cursor: 'pointer' }}>
+          XML · CFDI Parser
+        </span>
       </div>
 
+      {view === 'privacy' ? (
+        <Privacy onBack={() => setView('home')} />
+      ) : (
     <div className="app">
+      <div className="privacy-banner">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.955 11.955 0 003 12c0 6.627 5.373 12 12 12s12-5.373 12-12c0-2.045-.51-3.97-1.407-5.658" />
+          <path strokeLinecap="round" strokeLinejoin="round" d="M12 3c-1.352 0-2.657.177-3.898.507A12.006 12.006 0 003.598 6" />
+        </svg>
+        <span>
+          <strong>Tu información es privada.</strong> Los archivos XML se procesan directamente en tu navegador —
+          ningún dato se envía ni se almacena en servidores externos. Todo ocurre en tu computadora.
+        </span>
+      </div>
+
       <div className="page-header">
         <h1>Importar Facturas XML</h1>
         <p>Carga XMLs de CFDI 4.0 del SAT y exporta los conceptos a Excel con el formato estándar de distribuidores</p>
@@ -67,7 +96,10 @@ export default function App() {
             d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
         </svg>
         <p>{loading ? 'Procesando…' : 'Arrastra tus archivos XML aquí o haz clic para seleccionar'}</p>
-        <span>Solo .xml · Duplicados omitidos automáticamente</span>
+        <span>
+          Solo .xml · Los archivos se <strong>acumulan</strong> en cada carga (duplicados omitidos por UUID).
+          {rows.length > 0 && ' Usa "Limpiar" para empezar desde cero.'}
+        </span>
           <input id="fileInput" type="file" accept=".xml" multiple onChange={e => processFiles(e.target.files)} />
         </div>
       </div>
@@ -105,30 +137,25 @@ export default function App() {
             <button className="btn-clear" onClick={() => setRows([])}>Limpiar</button>
           </div>
 
-          <div className="table-wrap">
-            <table>
-              <thead>
-                <tr>{PREVIEW_COLS.map(c => <th key={c}>{c}</th>)}</tr>
-              </thead>
-              <tbody>
-                {rows.map((r, i) => (
-                  <tr key={i}>
-                    <td>{r.DISTRIBUIDOR}</td>
-                    <td>{fmt(r.FECHA)}</td>
-                    <td>{r.FACTURA}</td>
-                    <td>{r.RFC}</td>
-                    <td>{r.CODSAP}</td>
-                    <td className="col-producto">{r.PRODUCTO}</td>
-                    <td className="num">{r.BOTELLAS}</td>
-                    <td className="num">${r.TOTAL?.toLocaleString('es-MX', { minimumFractionDigits: 2 })}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="sheet-wrap">
+            <UniverSheet rows={rows} />
           </div>
         </>
       )}
     </div>
+      )}
+
+      <footer className="footer">
+        <div className="footer-inner">
+          <span className="footer-brand">XML · CFDI Parser</span>
+          <span className="footer-sep">·</span>
+          <span className="footer-tag">Sin servidor · Sin cookies · Sin tracking</span>
+          <span className="footer-sep">·</span>
+          <button className="footer-link" onClick={() => setView('privacy')}>
+            Aviso de Privacidad
+          </button>
+        </div>
+      </footer>
     </>
   )
 }
