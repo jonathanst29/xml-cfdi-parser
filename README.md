@@ -4,6 +4,8 @@ Convierte facturas electrónicas mexicanas (CFDI 4.0 del SAT) a Excel directamen
 
 > **Privacidad por diseño:** todo el procesamiento ocurre localmente. Tus XMLs nunca se envían a ningún servidor.
 
+🌐 **Sitio en vivo:** [https://jonathanst29.github.io/XML-CFDI-Parser/](https://jonathanst29.github.io/XML-CFDI-Parser/)
+
 ---
 
 ## ¿Qué problema resuelve?
