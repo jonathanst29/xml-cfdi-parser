@@ -36,6 +36,10 @@ export default function App() {
       return [...prev, ...parsed.filter(r => !existing.has(r.DOCUMENTO?.toUpperCase()))]
     })
     setLoading(false)
+    // Umami: cuántos XMLs cargó este lote
+    try {
+      window.umami?.track?.('files_loaded', { count: xmlFiles.length })
+    } catch { /* ignore */ }
   }, [])
 
   const onDrop = useCallback((e) => {
@@ -79,8 +83,8 @@ export default function App() {
       </div>
 
       <div className="page-header">
-        <h1>Importar Facturas XML</h1>
-        <p>Carga XMLs de CFDI 4.0 del SAT y exporta los conceptos a Excel con el formato estándar de distribuidores</p>
+        <h1>Convertir CFDI a Excel</h1>
+        <p>Convierte facturas CFDI 4.0 (XML del SAT) a un Excel listo para revisar, filtrar y compartir. Todo se procesa en tu navegador — los XMLs nunca se suben a ningún servidor. Gratis, sin registro y sin límite de archivos.</p>
       </div>
 
       <div className="upload-card">

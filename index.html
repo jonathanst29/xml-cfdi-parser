@@ -2,14 +2,102 @@
 <html lang="es-MX">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href="/XML-CFDI-Parser/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Convierte facturas electrónicas mexicanas (CFDI 4.0) a Excel directamente desde el navegador. 100% local, sin servidor, sin tracking." />
-    <title>XML · CFDI Parser — Convierte CFDIs a Excel</title>
+    <meta name="theme-color" content="#0a6ed1" />
+
+    <!-- SEO básico -->
+    <title>Convertir CFDI a Excel · XML del SAT a XLSX gratis y sin servidor</title>
+    <meta name="description" content="Herramienta gratis para convertir facturas CFDI 4.0 (XML del SAT) a Excel. 100% local en tu navegador, sin subir archivos a ningún servidor, sin registro y sin límites." />
+    <meta name="keywords" content="cfdi a excel, xml sat a excel, convertir cfdi, cfdi 4.0, factura electrónica a excel, parser cfdi, xml a xlsx, sat a excel, exportar facturas a excel" />
+    <meta name="author" content="Jonathan Terán" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://jonathanst29.github.io/XML-CFDI-Parser/" />
+
+    <!-- Open Graph (Facebook, WhatsApp, LinkedIn) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_MX" />
+    <meta property="og:url" content="https://jonathanst29.github.io/XML-CFDI-Parser/" />
+    <meta property="og:title" content="Convertir CFDI a Excel — Gratis, sin servidor, sin registro" />
+    <meta property="og:description" content="Convierte tus facturas CFDI 4.0 (XML del SAT) a Excel directamente en tu navegador. Sin subir archivos. Sin login. Sin costo." />
+    <meta property="og:image" content="https://jonathanst29.github.io/XML-CFDI-Parser/favicon.svg" />
+    <meta property="og:site_name" content="XML · CFDI Parser" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Convertir CFDI a Excel — Gratis, sin servidor" />
+    <meta name="twitter:description" content="Convierte facturas XML del SAT (CFDI 4.0) a Excel sin subir nada a Internet. 100% local." />
+    <meta name="twitter:image" content="https://jonathanst29.github.io/XML-CFDI-Parser/favicon.svg" />
+
+    <!-- JSON-LD: WebApplication + FAQ -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "XML · CFDI Parser",
+      "url": "https://jonathanst29.github.io/XML-CFDI-Parser/",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Cualquier navegador moderno",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "MXN"
+      },
+      "description": "Convierte facturas CFDI 4.0 (XML del SAT) a Excel directamente en el navegador. Sin servidor, sin registro, sin límites.",
+      "inLanguage": "es-MX"
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "¿Mis facturas se guardan en algún servidor?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. Todo el procesamiento ocurre dentro de tu navegador. Los archivos XML nunca se envían a Internet. Si cierras la pestaña, todo se borra de la memoria."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Funciona con CFDI 3.3?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Por ahora solo soporta CFDI 4.0, la versión obligatoria desde 2023. Si tienes facturas en 3.3 puede que no se lean correctamente."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Tiene límite de archivos?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No hay límite. Hemos probado con más de 200 XMLs sin problema. La única restricción es la memoria de tu navegador."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Cuánto cuesta?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Es completamente gratis y sin registro."
+          }
+        }
+      ]
+    }
+    </script>
+
     <script defer src="https://cloud.umami.is/script.js" data-website-id="485e86ef-bac9-4f98-abcc-087d907b653e"></script>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!-- Fallback estático para indexación; React lo reemplaza al hidratar -->
+      <noscript>
+        <h1>Convertir CFDI a Excel</h1>
+        <p>Esta herramienta requiere JavaScript activado para funcionar. Convierte facturas CFDI 4.0 (XML del SAT) a Excel directamente en tu navegador, sin subir archivos a ningún servidor.</p>
+      </noscript>
+    </div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
