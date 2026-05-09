@@ -77,8 +77,9 @@ export default function App() {
           <path strokeLinecap="round" strokeLinejoin="round" d="M12 3c-1.352 0-2.657.177-3.898.507A12.006 12.006 0 003.598 6" />
         </svg>
         <span>
-          <strong>Tu información es privada.</strong> Los archivos XML se procesan directamente en tu navegador —
-          ningún dato se envía ni se almacena en servidores externos. Todo ocurre en tu computadora.
+          <strong>Sin servidor, sin promesas: solo tu navegador.</strong> Tus XMLs nunca salen de tu computadora
+          porque no hay servidor a dónde enviarlos. Puedes desconectar tu internet después de cargar la página
+          y la herramienta sigue funcionando perfectamente.
         </span>
       </div>
 
