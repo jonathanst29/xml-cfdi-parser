@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://jonathanst29.github.io/XML-CFDI-Parser/sitemap.xml
+Sitemap: https://excelcfdi.com/sitemap.xml
